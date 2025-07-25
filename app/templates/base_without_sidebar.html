@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}StudentOverflow{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6750A4',
+                        'primary-hover': '#5a4692'
+                    }
+                }
+            }
+        }
+    </script>
+    {% block head %}{% endblock %}
+</head>
+
+<body class="bg-gray-50 text-gray-900">
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 z-50 w-full bg-white border-b border-gray-200">
+        <div class="max-w-screen-xl mx-auto p-4 grid grid-cols-3 items-center">
+            <div class="flex items-center space-x-3">
+                <a href="/" class="flex items-center space-x-3">
+                    <svg class="w-6 h-6 text-gray-800 flex-shrink-0" fill="none" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5.35709 16V5.78571c0-.43393.34822-.78571.77777-.78571H18.5793c.4296 0 .7778.35178.7778.78571V16M5.35709 16h-1c-.55229 0-1 .4477-1 1v1c0 .5523.44771 1 1 1H20.3571c.5523 0 1-.4477 1-1v-1c0-.5523-.4477-1-1-1h-1M5.35709 16H19.3571M9.35709 8l2.62501 2.5L9.35709 13m4.00001 0h2" />
+                    </svg>
+                    <span class="text-2xl font-semibold whitespace-nowrap">StudentOverflow</span>
+                </a>
+            </div>
+
+
+            <div class="text-center">
+            </div>
+
+            <div class="flex justify-end space-x-2">
+                {% if current_user.is_authenticated %}
+                <span class="text-gray-800 font-medium mr-4">Hola, {{ current_user.name }}</span>
+                <a href="{{ url_for('auth.logout') }}"
+                    class="text-white bg-gray-800 hover:bg-gray-700 font-medium rounded-lg text-sm px-4 py-2 transition-colors">
+                    Logout
+                </a>
+                {% else %}
+                <a href="{{ url_for('auth.register') }}"
+                    class="flex items-center gap-1 text-white bg-primary hover:bg-primary-hover font-medium rounded-lg text-sm px-4 py-2 transition-colors">
+                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 013-3h4a3 3 0 013 3v1a1 1 0 01-1 1H5a1 1 0 01-1-1Zm8-10a3 3 0 11-6 0 3 3 0 016 0Z" />
+                    </svg>
+                    Register
+                </a>
+                <a href="{{ url_for('auth.login') }}"
+                    class="text-white bg-gray-800 hover:bg-gray-700 font-medium rounded-lg text-sm px-4 py-2 transition-colors">
+                    Login
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main class="min-h-screen flex items-center justify-center">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+
+</html>

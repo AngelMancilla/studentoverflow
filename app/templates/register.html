@@ -1,18 +1,65 @@
-<form method="POST">
-  <input type="text" name="username" placeholder="Nombre de usuario" required>
-  <input type="email" name="email" placeholder="Correo electrónico" required>
-  <input type="password" name="password" placeholder="Contraseña" required>
-  <input type="password" name="confirm_password" placeholder="Confirmar contraseña" required>
-  <button type="submit">Registrarse</button>
-</form>
+{% extends 'base_without_sidebar.html' %}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <ul>
-    {% for category, message in messages %}
-      <li class="{{ category }}">{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
+{% block title %}Register | StudentOverflow{% endblock %}
 
+{% block content %}
+<div class="flex h-screen">
+  <!-- Left column - Register form -->
+  <div class="w-1/2 flex flex-col justify-center items-start px-24 space-y-8">
+    <h1 class="text-3xl font-black text-black">Join the StudentOverflow Community!</h1>
+    <p class="text-lg text-gray-700 max-w-md">
+      Get more features and privileges by joining the most helpful community of students and developers!
+    </p>
+
+    <form method="POST" action="{{ url_for('auth.register') }}" class="flex flex-col gap-5 w-full max-w-sm">
+      <!-- Username -->
+      <div>
+        <label for="username" class="block text-xs text-gray-500 mb-1">Username</label>
+        <input type="text" id="username" name="username" autocomplete="username"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Username" required>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-xs text-gray-500 mb-1">Email</label>
+        <input type="email" id="email" name="email" autocomplete="email"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Email" required>
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-xs text-gray-500 mb-1">Password</label>
+        <input type="password" id="password" name="password" autocomplete="new-password"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="••••••••" required>
+      </div>
+
+      <!-- Confirm Password -->
+      <div>
+        <label for="confirm_password" class="block text-xs text-gray-500 mb-1">Confirm Password</label>
+        <input type="password" id="confirm_password" name="confirm_password" autocomplete="new-password"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Confirm your password" required>
+      </div>
+
+      <!-- Error -->
+      {% if error %}
+      <p class="text-sm text-red-600 font-medium">{{ error }}</p>
+      {% endif %}
+
+      <!-- Register Button -->
+      <button type="submit"
+        class="bg-[#6750A4] hover:bg-[#5a4692] text-white font-bold py-2 rounded-md transition-colors duration-300">
+        Register
+      </button>
+    </form>
+  </div>
+
+  <!-- Right column - Image -->
+  <div class="w-1/2 hidden md:block">
+    <img src="../static/assets/Computer_Coding_webp.webp" alt="Register illustration" class="object-cover w-full h-full" />
+  </div>
+</div>
+{% endblock %}

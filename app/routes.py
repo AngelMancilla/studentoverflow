@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
-@login_required
+# @login_required
 def home():
     return render_template('home.html')
 

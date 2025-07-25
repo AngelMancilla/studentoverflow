@@ -1,47 +1,152 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Welcome to StudentOverflow</h1>
-        {% if current_user.is_authenticated %}
-            <a href="{{ url_for('main.create_question') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg">
-                Ask Question
-            </a>
-        {% endif %}
+<div class="max-w-7xl mx-auto p-6 grid grid-cols-4 gap-8">
+    <!-- Columna principal con preguntas -->
+    <div class="col-span-3">
+        <div class="mb-6">
+            <div
+                class="max-w-full px-7 py-6 bg-white rounded-md shadow-md border border-gray-200 flex flex-col gap-3 overflow-hidden">
+                <!-- Header -->
+                <div class="relative flex items-center gap-4 h-10">
+                    <img class="w-10 h-10 rounded-full object-cover" src="https://placehold.co/40x40" alt="Avatar" />
+                    <div class="flex flex-col justify-center">
+                        <span class="text-xs text-black font-normal tracking-wide">Golanginya</span>
+                        <span class="text-[10px] text-zinc-500 tracking-wide">5 min ago</span>
+                    </div>
+                    <div
+                        class="absolute right-0 top-2 w-6 h-6 cursor-pointer flex flex-col justify-center items-center space-y-[2px]">
+                        <span class="w-0.5 h-0.5 bg-zinc-500 rounded-full"></span>
+                        <span class="w-0.5 h-0.5 bg-zinc-500 rounded-full"></span>
+                        <span class="w-0.5 h-0.5 bg-zinc-500 rounded-full"></span>
+                    </div>
+                </div>
+
+                <!-- Título y descripción -->
+                <div class="flex flex-col gap-2">
+                    <h2 class="text-black text-sm font-bold tracking-wide">How to patch KDE on FreeBSD?</h2>
+                    <p class="text-black text-sm font-light leading-relaxed tracking-wide">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat aliquet maecenas ut sit
+                        nulla.
+                    </p>
+                </div>
+
+                <!-- Tags -->
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">golang</span>
+                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">linux</span>
+                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">overflow</span>
+                </div>
+
+                <!-- Stats -->
+                <div class="flex items-center gap-4 mt-2 text-zinc-500 text-xs tracking-tight">
+                    <div class="flex items-center gap-1">
+                        <span>125</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <span>15</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none" />
+                        </svg>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <span>155</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5v14"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <div
+                class="max-w-full px-7 py-6 bg-white rounded-md shadow-md border border-gray-200 flex flex-col gap-3 overflow-hidden">
+                <!-- Header -->
+                <div class="relative flex items-center gap-4 h-10">
+                    <img class="w-10 h-10 rounded-full object-cover" src="https://placehold.co/40x40" alt="Avatar" />
+                    <div class="flex flex-col justify-center">
+                        <span class="text-xs text-black font-normal tracking-wide">Golanginya</span>
+                        <span class="text-[10px] text-zinc-500 tracking-wide">5 min ago</span>
+                    </div>
+                    <div
+                        class="absolute right-0 top-2 w-6 h-6 cursor-pointer flex flex-col justify-center items-center space-y-[2px]">
+                        <span class="w-0.5 h-0.5 bg-zinc-500 rounded-full"></span>
+                        <span class="w-0.5 h-0.5 bg-zinc-500 rounded-full"></span>
+                        <span class="w-0.5 h-0.5 bg-zinc-500 rounded-full"></span>
+                    </div>
+                </div>
+
+                <!-- Título y descripción -->
+                <div class="flex flex-col gap-2">
+                    <h2 class="text-black text-sm font-bold tracking-wide">How to patch KDE on FreeBSD?</h2>
+                    <p class="text-black text-sm font-light leading-relaxed tracking-wide">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat aliquet maecenas ut sit
+                        nulla.
+                    </p>
+                </div>
+
+                <!-- Tags -->
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">golang</span>
+                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">linux</span>
+                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">overflow</span>
+                </div>
+
+                <!-- Stats -->
+                <div class="flex items-center gap-4 mt-2 text-zinc-500 text-xs tracking-tight">
+                    <div class="flex items-center gap-1">
+                        <span>125</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <span>15</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none" />
+                        </svg>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <span>155</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5v14"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Repite este bloque para más preguntas -->
     </div>
 
-    <form method="GET" action="{{ url_for('main.search') }}" class="mb-6">
-        <input
-            type="text"
-            name="q"
-            placeholder="Search questions..."
-            class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-        >
-    </form>
-
-    <div class="space-y-6">
-        {% for question in questions %}
-        <div class="bg-white rounded-xl shadow-md p-6 border border-gray-200">
-            <div class="flex justify-between items-center mb-2 text-sm text-gray-500">
-                <div>
-                    <span class="font-medium">{{ question.author.username }}</span>
-                    · {{ question.created_at.strftime('%b %d, %Y') }}
+    <!-- Columna derecha con bienvenida -->
+    <div class="col-span-1 sticky top-6">
+        <div class="w-full bg-white rounded-lg shadow-md border border-gray-200 p-5 flex flex-col items-center gap-4">
+            <!-- Icono e encabezado -->
+            <div class="flex flex-col items-center text-center">
+                <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M13 16h-1v-4h-1m1-4h.01M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z" />
+                    </svg>
                 </div>
-                <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                    {{ question.category }}
-                </span>
+                <h2 class="text-sm font-semibold text-gray-800">¡Bienvenido!</h2>
+                <p class="text-xs text-gray-600 mt-1">
+                    Antes de comenzar, por favor revisa las reglas de la plataforma.
+                </p>
             </div>
-            <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ question.title }}</h2>
-            <p class="text-gray-700 mb-4">{{ question.description[:150] }}...</p>
-            <a href="{{ url_for('main.view_question', question_id=question.id) }}"
-               class="inline-block text-blue-600 hover:text-blue-800 font-semibold">
-                View Question →
-            </a>
         </div>
-        {% else %}
-        <p class="text-gray-500">No questions yet. Be the first to ask!</p>
-        {% endfor %}
     </div>
 </div>
 {% endblock %}

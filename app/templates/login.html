@@ -1,6 +1,50 @@
-<form method="POST">
-  <input type="email" name="email" placeholder="Correo" required>
-  <input type="password" name="password" placeholder="Contraseña" required>
-  <button type="submit">Entrar</button>
-</form>
-<a href="{{ url_for('auth.register') }}">Crear cuenta</a>
+{% extends 'base_without_sidebar.html' %}
+
+{% block title %}Login | StudentOverflow{% endblock %}
+
+{% block content %}
+<div class="flex h-screen">
+  <!-- Left column - Login form -->
+  <div class="w-1/2 flex flex-col justify-center items-start px-24 space-y-8">
+    <h1 class="text-3xl font-black text-black">We’ve missed you!</h1>
+    <p class="text-lg text-gray-700 max-w-md">
+      More than 150 questions are waiting for your wise suggestions!
+    </p>
+
+    <form method="POST" action="{{ url_for('auth.login') }}" class="flex flex-col gap-5 w-full max-w-sm">
+      <!-- Username -->
+      <div>
+        <label for="username" class="block text-xs text-gray-500 mb-1">Username</label>
+        <input type="text" id="username" name="username"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Username">
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-xs text-gray-500 mb-1">Password</label>
+        <input type="password" id="password" name="password"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="••••••••">
+      </div>
+
+      <!-- Error -->
+      {% if error %}
+      <p class="text-sm text-red-600 font-medium">{{ error }}</p>
+      {% endif %}
+
+      <!-- Login Button -->
+      <button type="submit"
+        class="bg-[#6750A4] hover:bg-[#5a4692] text-white font-bold py-2 rounded-md transition-colors duration-300">
+        Login
+      </button>
+    </form>
+  </div>
+
+  <!-- Right column - Image -->
+  <div class="w-1/2 hidden md:block">
+    <img src="../static/assets/Computer_Coding_webp.webp" alt="Login illustration" class="object-cover w-full h-full" />
+  </div>
+</div>
+{% endblock %}
+

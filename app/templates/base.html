@@ -1,40 +1,156 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}StudentOverflow{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6750A4',
+                        'primary-hover': '#5a4692'
+                    }
+                }
+            }
+        }
+    </script>
+    {% block head %}{% endblock %}
 </head>
-<body class="bg-gray-50 text-gray-900">
+
+<body class="bg-white text-gray-900">
+
     <!-- Navbar -->
-    <nav class="bg-white shadow-sm py-4">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-blue-600">StudentOverflow</a>
-            <div class="space-x-4">
-                {% if user.is_authenticated %}
-                    <a href="/questions/new" class="text-sm text-blue-500 hover:underline">Nueva Pregunta</a>
-                    <a href="/profile" class="text-sm text-gray-700 hover:underline">Mi perfil</a>
-                    <a href="/logout" class="text-sm text-red-500 hover:underline">Cerrar sesión</a>
+    <nav class="fixed top-0 left-0 z-50 w-full bg-white border-b border-gray-200">
+        <div class="max-w-screen-xl mx-auto p-4 grid grid-cols-3 items-center">
+            <div class="flex items-center space-x-3">
+                <a href="/" class="flex items-center space-x-3">
+                    <svg class="w-6 h-6 text-gray-800 flex-shrink-0" fill="none" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5.35709 16V5.78571c0-.43393.34822-.78571.77777-.78571H18.5793c.4296 0 .7778.35178.7778.78571V16M5.35709 16h-1c-.55229 0-1 .4477-1 1v1c0 .5523.44771 1 1 1H20.3571c.5523 0 1-.4477 1-1v-1c0-.5523-.4477-1-1-1h-1M5.35709 16H19.3571M9.35709 8l2.62501 2.5L9.35709 13m4.00001 0h2" />
+                    </svg>
+                    <span class="text-2xl font-semibold whitespace-nowrap">StudentOverflow</span>
+                </a>
+            </div>
+
+
+            <div class="text-center">
+                <h1 class="text-lg font-medium">Questions</h1>
+            </div>
+
+            <div class="flex justify-end space-x-2">
+                {% if current_user.is_authenticated %}
+                <span class="text-gray-800 font-medium mr-4">Hola, {{ current_user.name }}</span>
+                <a href="{{ url_for('auth.logout') }}"
+                    class="text-white bg-gray-800 hover:bg-gray-700 font-medium rounded-lg text-sm px-4 py-2 transition-colors">
+                    Logout
+                </a>
                 {% else %}
-                    <a href="/login" class="text-sm text-blue-500 hover:underline">Iniciar sesión</a>
-                    <a href="/register" class="text-sm text-blue-500 hover:underline">Registrarse</a>
+                <a href="{{ url_for('auth.register') }}"
+                    class="flex items-center gap-1 text-white bg-primary hover:bg-primary-hover font-medium rounded-lg text-sm px-4 py-2 transition-colors">
+                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 013-3h4a3 3 0 013 3v1a1 1 0 01-1 1H5a1 1 0 01-1-1Zm8-10a3 3 0 11-6 0 3 3 0 016 0Z" />
+                    </svg>
+                    Register
+                </a>
+                <a href="{{ url_for('auth.login') }}"
+                    class="text-white bg-gray-800 hover:bg-gray-700 font-medium rounded-lg text-sm px-4 py-2 transition-colors">
+                    Login
+                </a>
                 {% endif %}
             </div>
         </div>
     </nav>
 
-    <!-- Main content -->
-    <main class="container mx-auto px-4 mt-6">
+    <!-- Sidebar: siempre visible -->
+    <aside class="fixed top-16 left-0 z-40 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-200">
+        <div class="h-full px-3 py-4 overflow-y-auto">
+            <ul class="space-y-2 font-medium">
+
+                <!-- Opciones básicas -->
+                <li>
+                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+                        <svg class="w-6 h-6 text-gray-800" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                                d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+                        </svg>
+                        <span class="ml-3">Search</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+                        <svg class="w-6 h-6 text-gray-800" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                                d="M5 7h14M5 12h14M5 17h14" />
+                        </svg>
+                        <span class="ml-3">Questions</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+                        <svg class="w-6 h-6 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M18.045 3.007 12.31 3a1.965 1.965 0 0 0-1.4.585l-7.33 7.394a2 2 0 0 0 0 2.805l6.573 6.631a1.957 1.957 0 0 0 1.4.585 1.965 1.965 0 0 0 1.4-.585l7.409-7.477A2 2 0 0 0 21 11.479v-5.5a2.972 2.972 0 0 0-2.955-2.972Zm-2.452 6.438a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" />
+                        </svg>
+                        <span class="ml-3">Tags</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+                        <svg class="w-6 h-6 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd"
+                                d="M15.03 9.684h3.965c.322 0 .64.08.925.232.286.153.532.374.717.645a2.109 2.109 0 0 1 .242 1.883l-2.36 7.201c-.288.814-.48 1.355-1.884 1.355-2.072 0-4.276-.677-6.157-1.256-.472-.145-.924-.284-1.348-.404h-.115V9.478a25.485 25.485 0 0 0 4.238-5.514 1.8 1.8 0 0 1 .901-.83 1.74 1.74 0 0 1 1.21-.048c.396.13.736.397.96.757.225.36.32.788.269 1.211l-1.562 4.63ZM4.177 10H7v8a2 2 0 1 1-4 0v-6.823C3 10.527 3.527 10 4.176 10Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span class="ml-3">Ranking</span>
+                    </a>
+                </li>
+
+                {% if current_user.is_authenticated %}
+                <!-- Opciones extra para usuarios logueados -->
+                <li>
+                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+                        <svg class="w-6 h-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6M9 16h6M9 8h6M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span class="ml-3">Your Questions</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+                        <svg class="w-6 h-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 10h.01M12 14h.01M16 10h.01M21 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a6 6 0 016-6h6a6 6 0 016 6z" />
+                        </svg>
+                        <span class="ml-3">Your Answers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+                        <svg class="w-6 h-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span class="ml-3">Your Likes & Votes</span>
+                    </a>
+                </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </aside>
+
+    <main class="pt-16 pl-64 min-h-screen p-6">
         {% block content %}
+        <!-- Aquí se inyecta el contenido de cada página -->
         {% endblock %}
     </main>
 
-    <!-- Footer opcional -->
-    <footer class="mt-10 py-6 text-center text-sm text-gray-500">
-        &copy; 2025 StudentOverflow. Todos los derechos reservados.
-    </footer>
 </body>
+
 </html>
