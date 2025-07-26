@@ -4,44 +4,66 @@
 <div class="max-w-7xl mx-auto p-6 grid grid-cols-4 gap-8">
     <!-- Columna principal con preguntas -->
     <div class="col-span-3">
+        {% for question in questions %}
         <div class="mb-6">
             <div
                 class="max-w-full px-7 py-6 bg-white rounded-md shadow-md border border-gray-200 flex flex-col gap-3 overflow-hidden">
                 <!-- Header -->
                 <div class="relative flex items-center gap-4 h-10">
-                    <img class="w-10 h-10 rounded-full object-cover" src="https://placehold.co/40x40" alt="Avatar" />
+                    <img class="w-10 h-10 rounded-full object-cover"
+                        src="{{ question.author.avatar_url or 'https://placehold.co/40x40' }}" alt="Avatar" />
                     <div class="flex flex-col justify-center">
-                        <span class="text-xs text-black font-normal tracking-wide">Golanginya</span>
-                        <span class="text-[10px] text-zinc-500 tracking-wide">5 min ago</span>
+                        <span class="text-xs text-black font-normal tracking-wide">{{ question.author.name }}</span>
+                        <span class="text-[10px] text-zinc-500 tracking-wide">{{ question.created_at.strftime('%b %d,
+                            %Y') }}</span>
                     </div>
-                    <div
-                        class="absolute right-0 top-2 w-6 h-6 cursor-pointer flex flex-col justify-center items-center space-y-[2px]">
-                        <span class="w-0.5 h-0.5 bg-zinc-500 rounded-full"></span>
-                        <span class="w-0.5 h-0.5 bg-zinc-500 rounded-full"></span>
-                        <span class="w-0.5 h-0.5 bg-zinc-500 rounded-full"></span>
-                    </div>
+
+                    {% if current_user.is_authenticated and current_user.id == question.user_id %}
+                    <form action="{{ url_for('main.delete_question', question_id=question.id) }}" method="POST"
+                        onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta pregunta?');"
+                        class="inline-block ml-auto flex items-center gap-2">
+                        <button type="submit" class="text-gray-800 hover:text-red-600" aria-label="Eliminar pregunta">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 6h18M9 6v12M15 6v12M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                            </svg>
+                        </button>
+                        <a href="{{ url_for('main.edit_question', question_id=question.id) }}"
+                            aria-label="Editar pregunta"
+                            class="w-6 h-6 text-blue-600 hover:text-blue-800 inline-flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15.232 5.232l3.536 3.536M9 11l6 6L5 21l-1-5 5-5z" />
+                            </svg>
+                        </a>
+                    </form>
+                    {% endif %}
+
+
                 </div>
 
                 <!-- Título y descripción -->
                 <div class="flex flex-col gap-2">
-                    <h2 class="text-black text-sm font-bold tracking-wide">How to patch KDE on FreeBSD?</h2>
+                    <h2 class="text-black text-sm font-bold tracking-wide">{{ question.title }}</h2>
                     <p class="text-black text-sm font-light leading-relaxed tracking-wide">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat aliquet maecenas ut sit
-                        nulla.
+                        {{ question.body[:200] }}{% if question.body|length > 200 %}...{% endif %}
                     </p>
                 </div>
 
                 <!-- Tags -->
                 <div class="flex flex-wrap gap-2">
-                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">golang</span>
-                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">linux</span>
-                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">overflow</span>
+                    {% for tag in question.tags %}
+                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">{{ tag.name
+                        }}</span>
+                    {% endfor %}
                 </div>
 
                 <!-- Stats -->
                 <div class="flex items-center gap-4 mt-2 text-zinc-500 text-xs tracking-tight">
                     <div class="flex items-center gap-1">
-                        <span>125</span>
+                        <span>{{ question.votes_count or 0 }}</span>
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6">
@@ -49,14 +71,14 @@
                         </svg>
                     </div>
                     <div class="flex items-center gap-1">
-                        <span>15</span>
+                        <span>{{ question.answers_count or 0 }}</span>
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5"
                             viewBox="0 0 24 24">
                             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none" />
                         </svg>
                     </div>
                     <div class="flex items-center gap-1">
-                        <span>155</span>
+                        <span>{{ question.views_count or 0 }}</span>
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5v14"></path>
@@ -65,69 +87,9 @@
                 </div>
             </div>
         </div>
-
-        <div class="mb-6">
-            <div
-                class="max-w-full px-7 py-6 bg-white rounded-md shadow-md border border-gray-200 flex flex-col gap-3 overflow-hidden">
-                <!-- Header -->
-                <div class="relative flex items-center gap-4 h-10">
-                    <img class="w-10 h-10 rounded-full object-cover" src="https://placehold.co/40x40" alt="Avatar" />
-                    <div class="flex flex-col justify-center">
-                        <span class="text-xs text-black font-normal tracking-wide">Golanginya</span>
-                        <span class="text-[10px] text-zinc-500 tracking-wide">5 min ago</span>
-                    </div>
-                    <div
-                        class="absolute right-0 top-2 w-6 h-6 cursor-pointer flex flex-col justify-center items-center space-y-[2px]">
-                        <span class="w-0.5 h-0.5 bg-zinc-500 rounded-full"></span>
-                        <span class="w-0.5 h-0.5 bg-zinc-500 rounded-full"></span>
-                        <span class="w-0.5 h-0.5 bg-zinc-500 rounded-full"></span>
-                    </div>
-                </div>
-
-                <!-- Título y descripción -->
-                <div class="flex flex-col gap-2">
-                    <h2 class="text-black text-sm font-bold tracking-wide">How to patch KDE on FreeBSD?</h2>
-                    <p class="text-black text-sm font-light leading-relaxed tracking-wide">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat aliquet maecenas ut sit
-                        nulla.
-                    </p>
-                </div>
-
-                <!-- Tags -->
-                <div class="flex flex-wrap gap-2">
-                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">golang</span>
-                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">linux</span>
-                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">overflow</span>
-                </div>
-
-                <!-- Stats -->
-                <div class="flex items-center gap-4 mt-2 text-zinc-500 text-xs tracking-tight">
-                    <div class="flex items-center gap-1">
-                        <span>125</span>
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6">
-                            </path>
-                        </svg>
-                    </div>
-                    <div class="flex items-center gap-1">
-                        <span>15</span>
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5"
-                            viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none" />
-                        </svg>
-                    </div>
-                    <div class="flex items-center gap-1">
-                        <span>155</span>
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5v14"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Repite este bloque para más preguntas -->
+        {% else %}
+        <p>No questions found.</p>
+        {% endfor %}
     </div>
 
     <!-- Columna derecha con bienvenida -->
@@ -141,9 +103,9 @@
                             d="M13 16h-1v-4h-1m1-4h.01M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z" />
                     </svg>
                 </div>
-                <h2 class="text-sm font-semibold text-gray-800">¡Bienvenido!</h2>
+                <h2 class="text-sm font-semibold text-gray-800">Welcome!</h2>
                 <p class="text-xs text-gray-600 mt-1">
-                    Antes de comenzar, por favor revisa las reglas de la plataforma.
+                    Please review the platform rules before you start.
                 </p>
             </div>
         </div>

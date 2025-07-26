@@ -12,12 +12,11 @@ def register():
         return redirect(url_for('main.home'))
 
     if request.method == 'POST':
-        name = request.form.get('username')  # ajusta al name real de tu form
+        name = request.form.get('username')  
         email = request.form.get('email')
         password = request.form.get('password')
         confirm = request.form.get('confirm_password')
 
-        # Validaciones mínimas
         errors = []
         if not name or not email or not password or not confirm:
             errors.append('Todos los campos son obligatorios.')

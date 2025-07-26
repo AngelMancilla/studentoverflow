@@ -18,6 +18,7 @@
             }
         }
     </script>
+    <script src="//unpkg.com/alpinejs" defer></script>
     {% block head %}{% endblock %}
 </head>
 
@@ -42,13 +43,37 @@
                 <h1 class="text-lg font-medium">Questions</h1>
             </div>
 
-            <div class="flex justify-end space-x-2">
+            <div class="flex justify-end items-center space-x-4 relative">
                 {% if current_user.is_authenticated %}
-                <span class="text-gray-800 font-medium mr-4">Hola, {{ current_user.name }}</span>
-                <a href="{{ url_for('auth.logout') }}"
-                    class="text-white bg-gray-800 hover:bg-gray-700 font-medium rounded-lg text-sm px-4 py-2 transition-colors">
-                    Logout
+                <!-- Add Question Button -->
+                <a href="{{ url_for('main.new_question') }}"
+                    class="bg-primary hover:bg-primary-hover text-white font-medium rounded-lg text-sm px-4 py-2 transition-colors">
+                    Add Question
                 </a>
+
+                <!-- User Menu -->
+                <div x-data="{ open: false }" class="relative" @keydown.escape="open = false"
+                    @click.away="open = false">
+                    <button @click="open = !open"
+                        class="text-gray-800 font-medium rounded-lg text-sm px-4 py-2 hover:bg-gray-100 flex items-center gap-2 focus:outline-none focus:ring focus:ring-primary">
+                        Hola, {{ current_user.name }}
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown menu -->
+                    <div x-show="open" x-transition
+                        class="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50"
+                        style="display: none;">
+                        <a href="{{ url_for('auth.logout') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Logout
+                        </a>
+                    </div>
+                </div>
+
                 {% else %}
                 <a href="{{ url_for('auth.register') }}"
                     class="flex items-center gap-1 text-white bg-primary hover:bg-primary-hover font-medium rounded-lg text-sm px-4 py-2 transition-colors">

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {% if title %}Editar Pregunta | StudentOverflow{% else %}Nueva Pregunta | StudentOverflow{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-6 grid grid-cols-4 gap-8 min-h-screen bg-gray-100">
+  <!-- Columna principal con formulario (3 columnas) -->
+  <div class="col-span-3 flex justify-center items-start">
+    <div class="w-full max-w-[720px] px-10 py-7 bg-white shadow-md rounded-md flex flex-col gap-6">
+
+      <!-- Mostrar mensajes flash -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="mb-4">
+            {% for category, message in messages %}
+              <div
+                class="p-3 rounded-md mb-2 text-sm
+                {% if category == 'error' %} bg-red-100 text-red-700
+                {% elif category == 'success' %} bg-green-100 text-green-700
+                {% else %} bg-gray-100 text-gray-700 {% endif %}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <h1 class="text-xl font-semibold mb-4">
+        {% if title %}Editar Pregunta{% else %}Nueva Pregunta{% endif %}
+      </h1>
+
+      <form action="{{ request.path }}" method="POST" class="flex flex-col gap-6">
+        
+        <div class="flex flex-col relative">
+          <label for="tags" class="text-zinc-500 text-xs font-light font-['Roboto'] tracking-tight mb-1">
+            Categorías (separadas por comas)
+          </label>
+          <input type="text" id="tags" name="tags" placeholder="python, flask, backend"
+                 value="{{ tags or '' }}"
+                 class="outline outline-2 outline-gray-200 rounded-[5px] px-3 py-2 text-sm focus:outline-primary focus:outline" />
+        </div>
+        
+        <div class="flex flex-col relative">
+          <label for="title" class="text-zinc-500 text-xs font-light font-['Roboto'] tracking-tight mb-1">
+            Título llamativo
+          </label>
+          <input type="text" id="title" name="title" required placeholder="Escribe el título de tu pregunta"
+                 value="{{ title or '' }}"
+                 class="outline outline-2 outline-gray-200 rounded-[5px] px-3 py-2 text-sm focus:outline-primary focus:outline" />
+        </div>
+        
+        <div class="flex flex-col relative">
+          <label for="body" class="text-zinc-500 text-xs font-light font-['Roboto'] tracking-tight mb-1">
+            Tu pregunta
+          </label>
+          <textarea id="body" name="body" required rows="10" placeholder="Escribe el cuerpo de tu pregunta..."
+                    class="outline outline-2 outline-gray-200 rounded-[5px] px-3 py-2 text-sm resize-y focus:outline-primary focus:outline">{{ body or '' }}</textarea>
+        </div>
+        
+        <div class="flex justify-end">
+          <button type="submit" 
+                  class="bg-primary hover:bg-primary-hover text-white font-black text-xs px-5 py-3 rounded-[5px] tracking-tight inline-flex items-center gap-2 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 13l4 4L19 7" />
+            </svg>
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Columna derecha sticky con bienvenida (1 columna) -->
+  <div class="col-span-1 sticky top-6 self-start">
+    <div class="w-full bg-white rounded-lg shadow-md border border-gray-200 p-5 flex flex-col items-center gap-4">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M13 16h-1v-4h-1m1-4h.01M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z" />
+          </svg>
+        </div>
+        <h2 class="text-sm font-semibold text-gray-800">Welcome!</h2>
+        <p class="text-xs text-gray-600 mt-1">
+          Please review the platform rules before you start.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
