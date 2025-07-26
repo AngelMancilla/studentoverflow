@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
-from .models import Question, Tag, QuestionTag
+from .models import Question, Tag, QuestionTag, Answer
 from . import db
 from sqlalchemy.orm import joinedload
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -111,4 +111,18 @@ def edit_question(question_id):
     current_tags = ', '.join([tag.name for tag in question.tags])
     return render_template('new_question.html', title=question.title, body=question.body, tags=current_tags)
 
+# routes.py
+@main_bp.route('/question/<int:question_id>/answer', methods=['POST'])
+@login_required
+def add_answer(question_id):
+    body = request.form.get('body')
+    if not body:
+        flash("La respuesta no puede estar vacía", "error")
+        return redirect(url_for('main.view_question', question_id=question_id))
+
+    answer = Answer(body=body, user_id=current_user.id, question_id=question_id)
+    db.session.add(answer)
+    db.session.commit()
+    flash("Respuesta añadida con éxito", "success")
+    return redirect(url_for('main.view_question', question_id=question_id))
 

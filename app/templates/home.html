@@ -6,16 +6,14 @@
     <div class="col-span-3">
         {% for question in questions %}
         <div class="mb-6">
-            <div
-                class="max-w-full px-7 py-6 bg-white rounded-md shadow-md border border-gray-200 flex flex-col gap-3 overflow-hidden">
+            <div class="max-w-full px-7 py-6 bg-white rounded-md shadow-md border border-gray-200 flex flex-col gap-3 overflow-hidden">
                 <!-- Header -->
                 <div class="relative flex items-center gap-4 h-10">
                     <img class="w-10 h-10 rounded-full object-cover"
                         src="{{ question.author.avatar_url or 'https://placehold.co/40x40' }}" alt="Avatar" />
                     <div class="flex flex-col justify-center">
                         <span class="text-xs text-black font-normal tracking-wide">{{ question.author.name }}</span>
-                        <span class="text-[10px] text-zinc-500 tracking-wide">{{ question.created_at.strftime('%b %d,
-                            %Y') }}</span>
+                        <span class="text-[10px] text-zinc-500 tracking-wide">{{ question.created_at.strftime('%b %d, %Y') }}</span>
                     </div>
 
                     {% if current_user.is_authenticated and current_user.id == question.user_id %}
@@ -40,8 +38,6 @@
                         </a>
                     </form>
                     {% endif %}
-
-
                 </div>
 
                 <!-- Título y descripción -->
@@ -55,8 +51,7 @@
                 <!-- Tags -->
                 <div class="flex flex-wrap gap-2">
                     {% for tag in question.tags %}
-                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">{{ tag.name
-                        }}</span>
+                    <span class="px-2.5 py-1 bg-gray-200 rounded-md text-zinc-500 text-xs tracking-wide">{{ tag.name }}</span>
                     {% endfor %}
                 </div>
 
@@ -71,7 +66,7 @@
                         </svg>
                     </div>
                     <div class="flex items-center gap-1">
-                        <span>{{ question.answers_count or 0 }}</span>
+                        <span>{{ question.answers|length }}</span>
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5"
                             viewBox="0 0 24 24">
                             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none" />
@@ -84,6 +79,67 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5v14"></path>
                         </svg>
                     </div>
+                </div>
+
+                <!-- Botón para responder -->
+                {% if current_user.is_authenticated %}
+                <button onclick="document.getElementById('answer-form-{{ question.id }}').classList.toggle('hidden')"
+                        class="text-sm text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded mt-4 w-max">
+                    Responder
+                </button>
+                {% endif %}
+
+                <!-- Formulario de respuesta -->
+                <form method="POST" action="{{ url_for('main.add_answer', question_id=question.id) }}"
+                      id="answer-form-{{ question.id }}" class="hidden mt-4">
+                    <div class="w-full px-5 py-5 bg-white shadow-[2px_1px_5px_0px_rgba(0,0,0,0.15)] flex flex-col justify-start items-end gap-2.5 border border-gray-200 rounded-md">
+                        <textarea name="body" required
+                                  class="w-full h-24 rounded-[5px] border-2 border-gray-200 p-2.5 text-sm text-gray-700 font-light font-['Roboto']"
+                                  placeholder="Type here your wise suggestion..."></textarea>
+                        <div class="flex justify-start items-center gap-2.5">
+                            <button type="button"
+                                    onclick="document.getElementById('answer-form-{{ question.id }}').classList.add('hidden')"
+                                    class="h-7 px-5 py-3 bg-gray-200 rounded-[5px] text-xs text-zinc-500 font-normal font-['Roboto']">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                    class="h-7 px-5 py-3 bg-blue-600 rounded-[5px] text-white text-xs font-black font-['Roboto']">
+                                Suggest
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Lista de respuestas -->
+                <div class="mt-6">
+                    {% for answer in question.answers %}
+                    <div class="w-full px-5 py-4 flex flex-col justify-start items-start gap-2.5 bg-gray-50 mt-3 rounded-md border border-gray-100">
+                        <div class="self-stretch">
+                            <span class="text-black text-sm font-medium font-['Roboto'] leading-normal tracking-wide">
+                                @{{ answer.author.name }},
+                            </span>
+                            <span class="text-black text-sm font-light font-['Roboto'] leading-normal tracking-wide">
+                                {{ answer.body }}
+                            </span>
+                        </div>
+                        <div class="self-stretch flex flex-col justify-start items-start">
+                            <div class="self-stretch h-0 border border-gray-200"></div>
+                            <div class="self-stretch h-6 relative mt-1">
+                                <div class="py-2.5 absolute right-0 inline-flex justify-start items-center gap-[5px]">
+                                    <span class="text-blue-500 text-xs font-light font-['Roboto']">Reply</span>
+                                </div>
+                                <div class="py-2.5 absolute left-0 inline-flex justify-start items-center gap-2.5">
+                                    <span class="text-zinc-500 text-xs font-medium font-['Roboto']">
+                                        by @{{ answer.author.name }}
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-sm text-gray-400 mt-4">Aún no hay respuestas. Sé el primero en contribuir.</p>
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -100,13 +156,14 @@
                 <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M13 16h-1v-4h-1m1-4h.01M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z" />
+                              d="M13 16h-1v-4h-1m1-4h.01M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z" />
                     </svg>
                 </div>
                 <h2 class="text-sm font-semibold text-gray-800">Welcome!</h2>
                 <p class="text-xs text-gray-600 mt-1">
-                    Please review the platform rules before you start.
+                    <bold>StudentOverflow</bold> is a web platform where students can ask and answer academic questions. Inspired by Stack Overflow, StudentOverflow seeks to foster collaborative learning.
                 </p>
+                <p>By AngelMancilla</p> 
             </div>
         </div>
     </div>
